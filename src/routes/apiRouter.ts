@@ -10,22 +10,22 @@ type LoginRequest = {
   password: string;
 };
 
-type SelfSignupRequest = {
-  companyDetails: {
-    name: string;
-    country: string;
-    currency: string;
-  };
-  userDetails: {
-    firstName: string;
-    lastName: string;
-    email: string;
-    password: string;
-  };
+type CompanyDetails = {
+  name: string;
+  country: string;
+  currency: string;
 };
 
-type SelfSignupResponse = {
-  issuerId: number;
+type UserDetails = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+};
+
+type SelfSignupRequest = {
+  companyDetails: CompanyDetails;
+  userDetails: UserDetails;
 };
 
 type PartnerAssistedSelfSignupPayload = {
@@ -82,7 +82,7 @@ router.post(
         }
       }
     } catch (error) {
-      res.status(400).json({ message: (error as any).message });
+      return res.status(400).json({ message: (error as any).message });
     }
 
     const partnerAssistedSelfSignupPayload: PartnerAssistedSelfSignupPayload = {
@@ -104,15 +104,12 @@ router.post(
       const partnerAssistedSelfSignupResponse =
         await axios.post<PartnerAssistedSelfSignupResponse>(
           "/onboarding/api/v1/partner/tenant-setup",
-          partnerAssistedSelfSignupPayload
+          JSON.stringify(partnerAssistedSelfSignupPayload)
         );
-      console.log({
-        partnerAssistedSelfSignupResponse,
-      });
 
       res.status(201).json({
         message: "Created issuer in Qmap",
-        data: partnerAssistedSelfSignupResponse,
+        data: partnerAssistedSelfSignupResponse.data,
       });
     } catch (error) {
       res.status(500).json({
