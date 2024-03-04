@@ -1,7 +1,7 @@
 import express, { Request } from "express";
 
 import { Company, User } from "../models";
-import { getAxios } from "../utils";
+import { getAxios, isSuccessResponse } from "../utils";
 
 const router = express.Router();
 
@@ -107,10 +107,17 @@ router.post(
           JSON.stringify(partnerAssistedSelfSignupPayload)
         );
 
-      res.status(201).json({
-        message: "Created issuer in Qmap",
-        data: partnerAssistedSelfSignupResponse.data,
-      });
+      if (isSuccessResponse(partnerAssistedSelfSignupResponse.status)) {
+        return res.status(201).json({
+          message: "Created issuer in Qmap",
+          data: partnerAssistedSelfSignupResponse.data,
+        });
+      } else {
+        return res.status(500).json({
+          message: "Failed to create issuer in Qmap.",
+          error: partnerAssistedSelfSignupResponse.data,
+        });
+      }
     } catch (error) {
       res.status(500).json({
         message: "Failed to create issuer in Qmap",
