@@ -1,6 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
 import apiRouter from "./routes/apiRouter";
+import cors from "cors";
 
 require("dotenv").config();
 
@@ -10,6 +11,8 @@ mongoose.connect(process.env.DATABASE_URL || "");
 const db = mongoose.connection;
 db.on("error", (error) => console.error(error));
 db.once("open", () => console.log("Connected to Database"));
+
+app.use(cors());
 
 app.use(express.json());
 
