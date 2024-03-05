@@ -5,8 +5,8 @@
   "main": "src/server.js",
   "scripts": {
     "devStart": "nodemon src/server.ts",
-    "build": "tsc",
-    "start": "node build/server.js"  
+    "build": "rm -rf build --write source/ && tsc",
+    "start": "node ./build/server.js"
   },
   "author": "chaitanya-qapita",
   "license": "ISC",
