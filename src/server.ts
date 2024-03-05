@@ -1,7 +1,9 @@
 import express from "express";
 import mongoose from "mongoose";
-import apiRouter from "./routes/apiRouter";
 import cors from "cors";
+
+import apiRouter from "./routes/apiRouter";
+import healthRouter from "./routes/healthRouter";
 
 require("dotenv").config();
 
@@ -17,5 +19,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api", apiRouter);
+
+app.use("/health", healthRouter);
 
 app.listen(3000, () => console.log("App Started"));
